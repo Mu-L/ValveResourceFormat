@@ -170,10 +170,10 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v7
       with:
-        #archive: false # https://github.com/oprypin/nightly.link/issues/88
-        name: Source2Viewer
-        path: 'GUI/bin/Release/win-x64/publish/*.exe'
-        compression-level: 0
+        # Uploaded as a bare file so that the artifact can be served as a direct download,
+        # the artifact is named after the file
+        archive: false
+        path: 'GUI/bin/Release/win-x64/publish/Source2Viewer.exe'
 
   analyze:
     name: Run all analyzers
@@ -202,6 +202,11 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         path: artifacts
+
+    - name: Rename Source2Viewer artifact folder
+      # Non-archived artifacts are downloaded into a folder named after the file,
+      # signpath expects the folder name that the archived artifact used to have
+      run: mv artifacts/Source2Viewer.exe artifacts/Source2Viewer
 
     - name: Display artifacts folder structure
       run: find .
